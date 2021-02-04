@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.tools.build.jetifier.core.utils.Log
 import com.example.testpromptnow.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var mAdapterData: AdapterData
     private val data = ArrayList<String>()
-    private var positionChek =ArrayList<Int>()
+    private var positionChek = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,27 +30,29 @@ class MainActivity : AppCompatActivity() {
         viewModel.onClickListener.observe(this, Observer {
             when (it) {
                 "Add" -> {
-                    data.add(0,binding.edInput.text.toString())
+                    data.add(0, binding.edInput.text.toString())
                     mAdapterData.notifyItemInserted(0)
+                    mAdapterData.notifyDataSetChanged()
                     binding.edInput.text!!.clear()
                 }
                 "Delete" -> {
-                    for (i in positionChek.indices){
+                    for (i in positionChek.indices) {
                         data.removeAt(positionChek[i])
                         mAdapterData.notifyItemRemoved(positionChek[i])
                     }
+                    mAdapterData.notifyDataSetChanged()
                     positionChek.clear()
                 }
             }
         })
         viewModel.onClickCheck.observe(this, Observer {
-            positionChek.add(it)
+           positionChek.add(it)
         })
 
     }
 
     private fun setRecyclerView() {
-        mAdapterData = AdapterData(data,viewModel.onClickCheck)
+        mAdapterData = AdapterData(data, viewModel.onClickCheck)
         binding.recyclerViewData.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = mAdapterData
