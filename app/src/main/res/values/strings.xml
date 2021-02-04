@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TestPromptNow</string>
+    <string name="message_delete">Delete</string>
+    <string name="message_add">Add</string>
+</resources>
